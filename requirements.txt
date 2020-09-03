@@ -1,0 +1,5 @@
+ttkthemes
+requests
+configparser
+pyglet
+argparse

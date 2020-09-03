@@ -10,6 +10,7 @@ import requests
 from configparser import ConfigParser
 import sys, argparse
 import pyglet
+from infi.systray import SysTrayIcon
 
 pyglet.font.add_file('googlesans.ttf')
 config = 'config.ini'
@@ -32,20 +33,25 @@ base.title("TheRagingBeast")
 base.geometry("300x300")
 base.configure(bg="Black")
 
+global roundoff
 def temp():
+    global roundoff
     final = requests.get(site)
     js = final.json()
     temp = js['main']['temp']
     finaltemp = (temp - 273.15)
-    return str(round(finaltemp))+degree
+    roundoff = str(round(finaltemp))+degree
+    return roundoff
 
 def city():
+    global city
     final = requests.get(site)
     js = final.json()
     city = js['name']
     return city.upper()
 
 def icon():
+    global icon
     final = requests.get(site)
     js = final.json()
     icon = js['weather'][0]['icon']
@@ -80,6 +86,19 @@ canvas.create_image(127,170, image=ic)
 canvas.create_text(125,210,text=cond(),font=('Google Sans', 14),fill='Black')
 canvas.create_text(130,240,text="Humidity :" + r'    ' + humid(), font=('Google Sans', 15),fill='Black')
 canvas.create_text(130,265,text="RealFeel :" + r'    ' + real_feel(), font=('Google Sans', 15),fill='Black')
+def gui_hide(systray):
+    base.withdraw()
+
+def gui_show(systray):
+    base.deiconify()
+
+def die(systray):
+    base.destroy()
+
+menu_options = (("Show GUI", None, gui_show),('Hide GUI', None, gui_hide), ('Kill GUI', None, die),)
+systray = SysTrayIcon('tray/{}.ico'.format(icon), "Weather", menu_options)
+systray.start()
+systray.update(hover_text=roundoff + r' ' + city)
 
 
 base.mainloop()

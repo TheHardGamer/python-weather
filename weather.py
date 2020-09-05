@@ -32,6 +32,8 @@ base = Tk()
 base.title("TheRagingBeast")
 base.geometry("300x300")
 base.configure(bg="Black")
+base.attributes('-alpha', 0.9)
+base.wm_attributes("-transparentcolor", "brown")
 
 global roundoff
 def temp():
@@ -67,7 +69,7 @@ def humid():
     final = requests.get(site)
     js = final.json()
     hum = js['main']['humidity']
-    return str(hum)
+    return str(hum) + str("%")
 
 def real_feel():
     final = requests.get(site)
@@ -79,13 +81,14 @@ def real_feel():
 canvas = Canvas(base, width=300, height=250)
 canvas.pack(expand='yes',fill='both')
 canvas.configure(bg="gray", highlightthickness=0)
-canvas.create_text(50,10,text=temp(),font=('Google Sans', 100),anchor='nw',fill='Black')
+canvas.create_text(50,10,text=temp(),font=('Google Sans', 100),anchor='nw',fill='brown')
 canvas.create_text(70,20,text=city(),font=('Google Sans', 14),fill='Black')
 ic = PhotoImage(file='icons/{}.png'.format(icon()))
 canvas.create_image(127,170, image=ic)
 canvas.create_text(125,210,text=cond(),font=('Google Sans', 14),fill='Black')
-canvas.create_text(130,240,text="Humidity :" + r'    ' + humid(), font=('Google Sans', 15),fill='Black')
-canvas.create_text(130,265,text="RealFeel :" + r'    ' + real_feel(), font=('Google Sans', 15),fill='Black')
+canvas.create_text(130,240,text="Humidity :" + r'   ' + humid(), font=('Google Sans', 15),fill='Black')
+canvas.create_text(130,265,text="RealFeel :" + r'   ' + real_feel(), font=('Google Sans', 15),fill='Black')
+
 def gui_hide(systray):
     base.withdraw()
 

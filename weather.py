@@ -1,14 +1,14 @@
-from tkinter import *
+from tkinter import Tk, Canvas, PhotoImage
 from tkinter import filedialog as fd
 import tkinter.ttk as ttk
 from ttkthemes import ThemedTk
 from ttkthemes import ThemedStyle
-from tkinter import ttk
 import time
 import re
 import requests
 from configparser import ConfigParser
-import sys, argparse
+import sys
+import argparse
 import pyglet
 from infi.systray import SysTrayIcon
 
@@ -21,7 +21,7 @@ city = cparser['stuff']['city']
 parser = argparse.ArgumentParser()
 parser.add_argument('city', nargs='?')
 args = parser.parse_args()
-if(args.city != None):
+if(args.city is not None):
     site='http://api.openweathermap.org/data/2.5/weather?q=' + args.city + '&appid=' + api
 else:
     site='http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + api
@@ -35,7 +35,6 @@ base.configure(bg="Black")
 base.attributes('-alpha', 0.9)
 base.wm_attributes("-transparentcolor", "brown")
 
-global roundoff
 def temp():
     global roundoff
     final = requests.get(site)
@@ -78,7 +77,7 @@ def real_feel():
     feelslike = (real_feel - 273.15)
     return str(round(feelslike))+degree
 
-canvas = Canvas(base, width=300, height=250)
+canvas = Canvas(base, width=300, height=300)
 canvas.pack(expand='yes',fill='both')
 canvas.configure(bg="gray", highlightthickness=0)
 canvas.create_text(50,10,text=temp(),font=('Google Sans', 100),anchor='nw',fill='brown')
